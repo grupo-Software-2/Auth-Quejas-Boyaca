@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.uptc.authservice.dto.LoginRequest;
 import com.uptc.authservice.dto.LoginResponse;
+import com.uptc.authservice.dto.LogoutRequest;
 import com.uptc.authservice.services.AuthService;
 
 import io.swagger.v3.oas.annotations.Operation;

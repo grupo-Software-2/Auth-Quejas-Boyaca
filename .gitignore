@@ -1,0 +1,48 @@
+# Maven
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!.mvn/wrapper/maven-wrapper.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# Build
+*.log
+*.class
+*.jar
+*.war
+*.ear
+
+# IDEs
+### IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+### VSCode
+.vscode/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Spring / Sensitive
+application-*.yml
+application-*.yaml
+application-*.properties
+!application-example.properties
+
+# Seguridad / Keys
+*.pem
+*.key
+*.crt
+*.jks
+*.p12
+secret.key
+
+# Docker
+docker-compose.override.yml
+
+# otros
+*.swp
+*.swo

@@ -30,7 +30,7 @@ public class Session {
     private Boolean active = true;
 
     @Column(name = "created_at")
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private final LocalDateTime createdAt = LocalDateTime.now();
 
     @Column(name = "expires_at")
     private LocalDateTime expiresAt;

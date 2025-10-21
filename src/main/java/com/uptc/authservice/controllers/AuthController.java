@@ -13,6 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.uptc.authservice.dto.LoginRequest;
 import com.uptc.authservice.dto.LoginResponse;
+import com.uptc.authservice.dto.LogoutRequest;
 import com.uptc.authservice.services.AuthService;
 
 @RestController
@@ -40,5 +41,22 @@ public class AuthController {
         authService.validateSession(token);
 
         return ResponseEntity.ok("Sesión válida");
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(@RequestHeader("Authorization") String authorizationHeader) {
+        if (!authorizationHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token inválido");
+        }
+
+        String token = authorizationHeader.substring(7);
+        boolean success = authService.logout(token);
+
+        if (success) {
+            return ResponseEntity.ok("Sesión cerrada correctamente");
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                                .body("Token inválido o sesión no encontrada");
+        }
     }
 }

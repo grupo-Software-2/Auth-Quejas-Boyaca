@@ -1,6 +1,7 @@
 package com.uptc.authservice.services;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,5 +68,20 @@ public class AuthServiceImpl implements AuthService {
         }
 
         return true;
-}
+    }
+
+    @Override
+    public boolean logout(String token) {
+        Optional<Session> sessionOpt = sessionRepository.findByTokenAndActiveTrue(token);
+
+        if (sessionOpt.isEmpty()) {
+            return false;
+        }
+
+        Session session = sessionOpt.get();
+        session.setActive(false);
+        sessionRepository.save(session);
+
+        return true;
+    }
 }

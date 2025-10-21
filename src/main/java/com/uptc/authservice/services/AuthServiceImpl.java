@@ -4,8 +4,10 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.uptc.authservice.dto.LoginRequest;
 import com.uptc.authservice.dto.LoginResponse;
@@ -50,4 +52,20 @@ public class AuthServiceImpl implements AuthService {
 
         return new LoginResponse(token, user.getUsername(), "Login exitoso");
     }
+
+    @Override
+    public boolean validateSession(String token) {
+        Session session = sessionRepository.findByTokenAndActiveTrue(token)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Token inválido"));
+
+        if (!session.getActive()) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Sesión inactiva");
+        }
+
+        if (session.getExpiresAt().isBefore(LocalDateTime.now())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Sesión expirada");
+        }
+
+        return true;
+}
 }

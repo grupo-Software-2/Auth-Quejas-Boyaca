@@ -30,7 +30,7 @@ public class User {
     private Boolean activo = true;
 
     @Column(name = "created_at")
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private final LocalDateTime createdAt = LocalDateTime.now();
 
     public Long getId() {
         return id;

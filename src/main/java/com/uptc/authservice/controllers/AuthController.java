@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.uptc.authservice.dto.LoginRequest;
 import com.uptc.authservice.dto.LoginResponse;
-import com.uptc.authservice.dto.LogoutRequest;
 import com.uptc.authservice.services.AuthService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -67,11 +66,15 @@ public class AuthController {
         }
 
         String token = authorizationHeader.substring(7);
-        authService.validateSession(token);
+        boolean isValid = authService.validateSession(token);
+
+        if (!isValid) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Sesión no válida o expirada");
+        }
 
         return ResponseEntity.ok("Sesión válida");
     }
-
+    
     @Operation(summary = "Cerrar sesión", description = "Marca la sesión como inactiva o la elimina")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Sesión cerrada correctamente"),

@@ -32,7 +32,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 )
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 @SecurityRequirement(name = "bearerAuth")
 @Tag(name = "Autenticación", description = "Endpoints para login, logout y validación de sesión")
 public class AuthController {

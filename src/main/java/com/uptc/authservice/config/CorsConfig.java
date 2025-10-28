@@ -31,7 +31,7 @@ public class CorsConfig {
             .cors(Customizer.withDefaults()) // ⚡ versión moderna y sin warnings
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/**").permitAll()
                 .anyRequest().authenticated()
             );
 

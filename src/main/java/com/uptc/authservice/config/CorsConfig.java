@@ -28,10 +28,11 @@ public class CorsConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .cors(Customizer.withDefaults()) // ⚡ versión moderna y sin warnings
+            .cors(Customizer.withDefaults())
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/**").permitAll()
+                .requestMatchers("/api/verify-captcha").permitAll()  // ✅ AGREGAR ESTO
+                .requestMatchers("/api/auth/**").permitAll()         // login/register
                 .anyRequest().authenticated()
             );
 

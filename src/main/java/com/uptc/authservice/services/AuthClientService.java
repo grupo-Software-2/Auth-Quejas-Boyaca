@@ -15,7 +15,7 @@ public class AuthClientService {
     private RestTemplate restTemplate;
 
     public boolean validateAuthToken(String token) {
-        String url = "http://localhost:8080/auth/validate-session";
+        String url = "https://auth-quejas-boyaca.onrender.com";
         org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
         headers.setBearerAuth(token);
         org.springframework.http.HttpEntity<Void> request = new org.springframework.http.HttpEntity<>(headers);

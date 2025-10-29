@@ -84,4 +84,22 @@ public class AuthServiceImpl implements AuthService {
 
         return true;
     }
+
+    @Override
+    public boolean verifyPassword(String token, String rawPassword) {
+        try {
+            // Buscar la sesión activa por token
+            Session session = sessionRepository.findByTokenAndActiveTrue(token)
+                    .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Token inválido o sesión expirada"));
+
+            // Obtener el usuario asociado
+            User user = session.getUser();
+
+            // Comparar la contraseña ingresada con la almacenada
+            return BCrypt.checkpw(rawPassword, user.getPassword());
+
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error al verificar la contraseña", e);
+        }
+    }
 }

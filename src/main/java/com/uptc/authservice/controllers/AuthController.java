@@ -23,6 +23,8 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+import java.util.Map;
+
 @SecurityScheme(
     name = "bearerAuth",
     type = SecuritySchemeType.HTTP,
@@ -33,7 +35,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/auth")
-@SecurityRequirement(name = "bearerAuth")
 @Tag(name = "Autenticación", description = "Endpoints para login, logout y validación de sesión")
 public class AuthController {
 
@@ -59,6 +60,7 @@ public class AuthController {
         @ApiResponse(responseCode = "503", description = "Servicio Auth no disponible")
     })
     @GetMapping("/validate-session")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<String> validateSession(@RequestHeader("Authorization") String authorizationHeader) {
 
         if (!authorizationHeader.startsWith("Bearer ")) {
@@ -82,6 +84,7 @@ public class AuthController {
         @ApiResponse(responseCode = "503", description = "Servicio Auth no disponible")
     })
     @PostMapping("/logout")
+    @SecurityRequirement(name = "bearerAuth")
     public ResponseEntity<String> logout(@RequestHeader("Authorization") String authorizationHeader) {
         if (!authorizationHeader.startsWith("Bearer ")) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token inválido");
@@ -95,6 +98,43 @@ public class AuthController {
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                                  .body("Token inválido o sesión no encontrada");
+        }
+    }
+
+    @Operation(summary = "Verificar contraseña actual", description = "Verifica si la contraseña ingresada coincide con la del usuario autenticado")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Contraseña válida"),
+            @ApiResponse(responseCode = "401", description = "Contraseña incorrecta o token inválido"),
+            @ApiResponse(responseCode = "500", description = "Error interno del servidor")
+    })
+    @PostMapping("/verify-password")
+    @SecurityRequirement(name = "bearerAuth")
+    public ResponseEntity<?> verifyPassword(
+            @RequestHeader("Authorization") String authorizationHeader,
+            @RequestBody Map<String, String> body) {
+
+        try {
+            if (!authorizationHeader.startsWith("Bearer ")) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("error", "Token inválido"));
+            }
+
+            String token = authorizationHeader.substring(7);
+            String password = body.get("password");
+
+            // ⚙️ Usamos el AuthService para validar la contraseña
+            boolean isValid = authService.verifyPassword(token, password);
+
+            if (!isValid) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of("error", "Contraseña incorrecta"));
+            }
+
+            return ResponseEntity.ok(Map.of("message", "Contraseña válida"));
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Error al verificar la contraseña"));
         }
     }
 }

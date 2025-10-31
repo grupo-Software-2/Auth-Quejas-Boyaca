@@ -6,7 +6,8 @@ public class LoginResponse {
     private String username;
     private String message;
 
-    public LoginResponse() {}
+    public LoginResponse() {
+    }
 
     public LoginResponse(String sessionId, String username, String message) {
         this.sessionId = sessionId;

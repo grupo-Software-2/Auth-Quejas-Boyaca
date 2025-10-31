@@ -1,13 +1,12 @@
 package com.uptc.authservice.config;
 
+import com.uptc.authservice.entities.User;
+import com.uptc.authservice.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Component;
-
-import com.uptc.authservice.entities.User;
-import com.uptc.authservice.repositories.UserRepository;
 
 @Component
 @Profile("dev")

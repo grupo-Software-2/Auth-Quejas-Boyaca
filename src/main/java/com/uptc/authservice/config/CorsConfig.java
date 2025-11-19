@@ -22,8 +22,8 @@ public class CorsConfig {
                         .requestMatchers(
                                 "/api/auth/login",
                                 "/api/auth/register",
-                                "/api/auth/validate-session",  // ✅ CRÍTICO para validación
-                                "/api/auth/verify-password",   // ✅ CRÍTICO para eliminación
+                                "/api/auth/validate-session",  
+                                "/api/auth/verify-password",   
                                 "/api/verify-captcha"
                         ).permitAll()
                         .anyRequest().authenticated()
@@ -37,7 +37,7 @@ public class CorsConfig {
         CorsConfiguration configuration = new CorsConfiguration();
 
         configuration.setAllowedOrigins(Arrays.asList(
-                "https://taller-quejas.vercel.app",  // Frontend
+                "https://taller-quejas.vercel.app",  
                 "http://civic-hollie-quejas-boyaca-software-ii-76da7249.koyeb.app"
         ));
 
